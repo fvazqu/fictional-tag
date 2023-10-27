@@ -27,7 +27,7 @@ class EnvBall(MujocoEnv, utils.EzPickle):
 
     def __init__(
         self,
-        xml_file: str = "C:/Users/Fabian/PycharmProjects/RL_research/bexa/bexb/envs/modelos/helloworld.xml",
+        xml_file: str = "fullpathtohelloworld.xml",
         #xml_file: str = "helloworld.xml",
         frame_skip: int = 2,
         default_camera_config: Dict[str, float] = DEFAULT_CAMERA_CONFIG,
