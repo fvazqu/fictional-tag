@@ -28,11 +28,11 @@ class EnvBall(MujocoEnv, utils.EzPickle):
     def __init__(
         self,
         xml_file: str = "fullpathtohelloworld.xml",
-        #xml_file: str = "helloworld.xml",
         frame_skip: int = 2,
         default_camera_config: Dict[str, float] = DEFAULT_CAMERA_CONFIG,
         reward_dist_weight: float = 1,
         reward_control_weight: float = 1,
+        reward_touching_weight: float = 5,
         **kwargs,
     ):
         utils.EzPickle.__init__(
@@ -42,11 +42,13 @@ class EnvBall(MujocoEnv, utils.EzPickle):
             default_camera_config,
             reward_dist_weight,
             reward_control_weight,
+            reward_touching_weight,
             **kwargs,
         )
 
         self._reward_dist_weight = reward_dist_weight
         self._reward_control_weight = reward_control_weight
+        self._reward_touching_weight = reward_touching_weight
 
         observation_space = Box(low=-np.inf, high=np.inf, shape=(6,), dtype=np.float64)
 
@@ -73,6 +75,13 @@ class EnvBall(MujocoEnv, utils.EzPickle):
         reward_dist = -np.linalg.norm(vec) * self._reward_dist_weight
         reward_ctrl = -np.square(action).sum() * self._reward_control_weight
 
+        # Reward for touching the target
+        distance = np.linalg.norm(vec)
+        if distance < 0.04:
+            reward_touching = self._reward_touching_weight
+        else:
+            reward_touching = 0.0
+
         self.do_simulation(action, self.frame_skip)
 
         observation = self._get_obs()
@@ -80,17 +89,19 @@ class EnvBall(MujocoEnv, utils.EzPickle):
         info = {
             "reward_dist": reward_dist,
             "reward_ctrl": reward_ctrl,
+            "reward_touching": reward_touching,
         }
 
         # Check if the ball touches the target
         distance = np.linalg.norm(vec)
-        print(distance)
         if distance < 0.04:  # Adjust the threshold as needed
-            self.reset_model()  # Reset the model if the condition is met
+            self.steps_since_last_reset += 1
+        else:
+            self.steps_since_last_reset = 0
 
-        if self.render_mode == "human":
-            self.render()
-        return observation, reward, False, False, info
+        if self.steps_since_last_reset >= 10:
+            self.reset_model()  # Reset the model if the condition is met
+            self.steps_since_last_reset = 0
 
     def reset_model(self):
         qpos = (
