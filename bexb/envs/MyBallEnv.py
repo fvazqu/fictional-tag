@@ -85,7 +85,7 @@ class EnvBall(MujocoEnv, utils.EzPickle):
         self.do_simulation(action, self.frame_skip)
 
         observation = self._get_obs()
-        reward = reward_dist + reward_ctrl
+        reward = reward_dist + reward_ctrl + reward_touching
         info = {
             "reward_dist": reward_dist,
             "reward_ctrl": reward_ctrl,
