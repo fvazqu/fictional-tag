@@ -103,6 +103,10 @@ class EnvBall(MujocoEnv, utils.EzPickle):
             self.reset_model()  # Reset the model if the condition is met
             self.steps_since_last_reset = 0
 
+        if self.render_mode == "human":
+            self.render()
+        return observation, reward, False, False, info
+
     def reset_model(self):
         qpos = (
                 self.np_random.uniform(low=-0.1, high=0.1, size=self.model.nq)
