@@ -6,16 +6,6 @@ To Recreate, make sure to structures the files on the github repo in the followi
 ![image](https://github.com/fvazqu/fictional-tag/assets/63169963/3c745a92-ab58-4dd3-b2b0-8d6e5d2bfa15)
 
 
-Project Folder
-  main.py
-  setup.py
-  bexb folder
-    __init__.py
-    envs folder
-    MyBallEnv.py
-    __init__.py
-    your XML file
-
 
 Notes:
 1. Make sure to change line 30 of MyBallEnv with the absolute full path to your XML file
