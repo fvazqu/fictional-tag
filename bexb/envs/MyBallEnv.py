@@ -33,6 +33,7 @@ class EnvBall(MujocoEnv, utils.EzPickle):
         reward_dist_weight: float = 1,
         reward_control_weight: float = 1,
         reward_touching_weight: float = 5,
+        reward_fall_weight: float = -5,
         **kwargs,
     ):
         utils.EzPickle.__init__(
@@ -43,12 +44,14 @@ class EnvBall(MujocoEnv, utils.EzPickle):
             reward_dist_weight,
             reward_control_weight,
             reward_touching_weight,
+            reward_fall_weight,
             **kwargs,
         )
 
         self._reward_dist_weight = reward_dist_weight
         self._reward_control_weight = reward_control_weight
         self._reward_touching_weight = reward_touching_weight
+        self._reward_fall_weight = reward_fall_weight
 
         observation_space = Box(low=-np.inf, high=np.inf, shape=(6,), dtype=np.float64)
 
@@ -75,10 +78,23 @@ class EnvBall(MujocoEnv, utils.EzPickle):
         reward_dist = -np.linalg.norm(vec) * self._reward_dist_weight
         reward_ctrl = -np.square(action).sum() * self._reward_control_weight
 
+
+        vec2 = self.get_body_com("ball") - self.get_body_com("floor")
+
+        # Checking if the ball has fallen
+        if vec2[2] < -0.005:
+           self.reset_model()
+           reward_fall = self._reward_fall_weight
+           #print('reset from fall')
+           #print(reward_fall)
+        else:
+           reward_fall = 0.0
+        
+
         # Reward for touching the target
         distance = np.linalg.norm(vec)
         if distance < 0.05:
-            reward_touching = self._reward_touching_weight
+            reward_touching = self._reward_touching_weight * self.steps_since_last_reset
         else:
             reward_touching = 0.0
 
@@ -99,7 +115,7 @@ class EnvBall(MujocoEnv, utils.EzPickle):
         else:
             self.steps_since_last_reset = 0
 
-        if self.steps_since_last_reset >= 20:
+        if self.steps_since_last_reset >= 100:
             self.reset_model()  # Reset the model if the condition is met
             self.steps_since_last_reset = 0
 
