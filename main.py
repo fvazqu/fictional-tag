@@ -37,13 +37,6 @@ for _ in range(num_steps):
 
    observation, reward, terminated, truncated, info = env.step(action)
 
-   ball_height = observation[4]
-   height_threshold = -0.5
-
-   if ball_height < height_threshold:
-      observation, info = env.reset()
-      print('reset')
-
    if terminated or truncated:
       observation, info = env.reset()
 
