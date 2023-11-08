@@ -93,7 +93,7 @@ class EnvBall(MujocoEnv, utils.EzPickle):
 
         # Reward for touching the target
         distance = np.linalg.norm(vec)
-        if distance < 0.05:
+        if distance < 0.04:
             reward_touching = self._reward_touching_weight * self.steps_since_last_reset
         else:
             reward_touching = 0.0
@@ -101,16 +101,17 @@ class EnvBall(MujocoEnv, utils.EzPickle):
         self.do_simulation(action, self.frame_skip)
 
         observation = self._get_obs()
-        reward = reward_dist + reward_ctrl + reward_touching
+        reward = reward_dist + reward_ctrl + reward_touching + reward_fall
         info = {
             "reward_dist": reward_dist,
             "reward_ctrl": reward_ctrl,
             "reward_touching": reward_touching,
+            "reward_fall": reward_fall,
         }
 
         # Check if the ball touches the target
         distance = np.linalg.norm(vec)
-        if distance < 0.05:  # Adjust the threshold as needed
+        if distance < 0.04:  # Adjust the threshold as needed
             self.steps_since_last_reset += 1
         else:
             self.steps_since_last_reset = 0
