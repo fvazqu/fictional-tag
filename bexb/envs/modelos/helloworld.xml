@@ -17,6 +17,11 @@
     <light pos="0 0 .6"/>
     <camera name="top" pos="0 0 1" xyaxes="1 0 0 0 1 2"/>
 
+    <!-- Floor -->
+    <body name="floor">
+      <geom size=".5 .5 .01" type="box" material="floor_mat"/>
+    </body>
+
     <!-- Target -->
     <body name="target" pos=".25 0 .03">
       <joint armature="0" axis="1 0 0" damping="0" limited="true" name="target_x" pos="0 0 0" range="0 .3" ref=".1" stiffness="0" type="slide"/>
@@ -31,14 +36,6 @@
       <joint axis="0 0 1" name="rotz" pos="0 0 0" range="-1 0.02" type="slide"/>
       <geom name="ball" type="sphere" size=".02" material="ball_mat"/>
     </body>
-
-<!--    &lt;!&ndash; Wall &ndash;&gt;-->
-<!--    <body name="wall" pos="0.5 0.5 .02">-->
-<!--      <geom name="top_wall" fromto="0 0 0 -1 0 0" type="capsule" size=".02" rgba="1 .5 0 1"/>-->
-<!--      <geom name="left_wall" fromto="-1 0 0 -1 -1 0" type="capsule" size=".02" rgba="1 .5 0 1"/>-->
-<!--      <geom name="bottom_wall" fromto="-1 -1 0 0 -1 0" type="capsule" size=".02" rgba="1 .5 0 1"/>-->
-<!--      <geom name="right_wall" fromto="0 -1 0 0 0 0" type="capsule" size=".02" rgba="1 .5 0 1"/>-->
-<!--    </body>-->
 
   </worldbody>
 
