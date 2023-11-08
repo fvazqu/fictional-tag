@@ -3,7 +3,7 @@ OpenAI gymnasium custom env for mujoco simulation with ball targeting a box, the
 
 To Recreate, make sure to structures the files on the github repo in the following order in your project folder:
 
-'''python
+'''text
 v Project Folder
    main.py
   v bexa
