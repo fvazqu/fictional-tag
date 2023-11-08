@@ -7,6 +7,7 @@ To Recreate, make sure to structures the files on the github repo in the followi
 ''''
 '''
 v Project Folder
+
   main.py
   v bexa
       setup.py
