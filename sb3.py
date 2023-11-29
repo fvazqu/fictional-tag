@@ -1,4 +1,3 @@
-# Shamelessly stolen from johnnycode8, most of it atleast
 import gymnasium as gym
 from stable_baselines3 import SAC, TD3, A2C, PPO
 import os
@@ -19,7 +18,7 @@ def train(env, sb3_algo):
             model = TD3('MlpPolicy', env, verbose=1, device='cuda', tensorboard_log=log_dir)
         case 'A2C':
             model = A2C('MlpPolicy', env, verbose=1, device='cuda', tensorboard_log=log_dir)
-        case 'PPO':
+        case 'PPO_16':
             model = PPO('MlpPolicy', env, verbose=1, device='cuda', tensorboard_log=log_dir, learning_rate=0.00003)
         case _:
             print('Algorithm not found')
@@ -30,8 +29,8 @@ def train(env, sb3_algo):
     while True:
         iters += 1
 
-        #model.learn(total_timesteps=TIMESTEPS, reset_num_timesteps=False, tb_log_name="PPO-00003")
-        model.learn(total_timesteps=TIMESTEPS, reset_num_timesteps=False, tb_log_name="PPO-00003")
+        #model.learn(total_timesteps=TIMESTEPS, reset_num_timesteps=False, tb_log_name="PPO")
+        model.learn(total_timesteps=TIMESTEPS, reset_num_timesteps=False, tb_log_name="PPO-16")
         model.save(f"{model_dir}/{sb3_algo}_{TIMESTEPS*iters}")
 
 def test(env, sb3_algo, path_to_model):
